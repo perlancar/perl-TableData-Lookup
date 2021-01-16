@@ -279,33 +279,76 @@ sub table_vlookup {
 }
 
 1;
-# ABSTRACT: Manipulate data structure via table object
+# ABSTRACT: Lookup value in a table data structure
 
-=for Pod::Coverage ^$
+=head1 SYNOPSIS
 
-=head1 FUNCTIONS
+ use TableData::Lookup qw(
+     table_vlookup
+ );
 
-=head2 table($data[ , $spec ]) => obj
+ # exact matching
+ table_vlookup(
+   table => [
+     {min_income=>      0, tax_rate=>0.13},
+     {min_income=>  8_000, tax_rate=>0.18},
+     {min_income=> 15_000, tax_rate=>0.22},
+     {min_income=> 35_000, tax_rate=>0.30},
+     {min_income=> 85_000, tax_rate=>0.39},
+     {min_income=>140_000, tax_rate=>0.45},
+   ],
+   lookup_field => 'min_income',
+   lookup_value => 35_000,
+   result_field => 'tax_rate',
+ ); # => 0.30
 
-Shortcut for C<< TableData::Object->new(...) >>.
+ # exact matching, not found
+ table_vlookup(
+   table => [
+     {min_income=>      0, tax_rate=>0.13},
+     {min_income=>  8_000, tax_rate=>0.18},
+     {min_income=> 15_000, tax_rate=>0.22},
+     {min_income=> 35_000, tax_rate=>0.30},
+     {min_income=> 85_000, tax_rate=>0.39},
+     {min_income=>140_000, tax_rate=>0.45},
+   ],
+   lookup_field => 'min_income',
+   lookup_value => 40_000,
+   result_field => 'tax_rate',
+ ); # => undef
 
+ # approximate matching
+ table_vlookup(
+   table => [
+     {min_income=>      0, tax_rate=>0.13},
+     {min_income=>  8_000, tax_rate=>0.18},
+     {min_income=> 15_000, tax_rate=>0.22},
+     {min_income=> 35_000, tax_rate=>0.30},
+     {min_income=> 85_000, tax_rate=>0.39},
+     {min_income=>140_000, tax_rate=>0.45},
+   ],
+   lookup_field => 'min_income',
+   lookup_value => 40_000,
+   result_field => 'tax_rate',
+   approx => 1,
+ ); # => 0.30
 
-=head1 METHODS
-
-=head2 new($data[ , $spec ]) => obj
-
-Detect the structure of C<$data> and create the appropriate
-C<TableData::Object::FORM> object.
+ # approximate matching & interpolated result
+ table_vlookup(
+   table => [
+     {min_income=>      0, tax_rate=>0.13},
+     {min_income=>  8_000, tax_rate=>0.18},
+     {min_income=> 15_000, tax_rate=>0.22},
+     {min_income=> 35_000, tax_rate=>0.30},
+     {min_income=> 85_000, tax_rate=>0.39},
+     {min_income=>140_000, tax_rate=>0.45},
+   ],
+   lookup_field => 'min_income',
+   lookup_value => 40_000,
+   result_field => 'tax_rate',
+   approx => 1,
+   interpolate => 1,
+ ); # => 0.309
 
 
 =head1 SEE ALSO
-
-L<TableData::Object::Base> for list of available methods.
-
-L<TableData::Object::aos>
-
-L<TableData::Object::aoaos>
-
-L<TableData::Object::aohos>
-
-L<TableData::Object::hash>
