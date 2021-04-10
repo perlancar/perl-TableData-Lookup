@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More 0.98;
 
-use TableData::Lookup qw(table_vlookup);
+use Data::TableData::Lookup qw(table_vlookup);
 
 my $table = [
     {a=> 1, b=> 100},

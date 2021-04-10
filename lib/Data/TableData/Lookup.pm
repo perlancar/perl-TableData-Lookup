@@ -1,4 +1,4 @@
-package TableData::Lookup;
+package Data::TableData::Lookup;
 
 # AUTHORITY
 # DATE
@@ -283,7 +283,7 @@ sub table_vlookup {
 
 =head1 SYNOPSIS
 
- use TableData::Lookup qw(
+ use Data::TableData::Lookup qw(
      table_vlookup
  );
 
